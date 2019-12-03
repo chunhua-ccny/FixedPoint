@@ -11,7 +11,7 @@ def compute_integral_part(input, overflow_rate):
     split_idx = int(overflow_rate * len(sorted_value))
     v = sorted_value[split_idx]
     if isinstance(v, Variable):
-        v = v.data.cpu().numpy()[0]
+        v = v.data.cpu().numpy()#[0]
     sf = math.ceil(math.log2(v+1e-12))
     return sf
 
@@ -23,7 +23,7 @@ def linear_quantize(input, sf, bits):
     bound = math.pow(2.0, bits-1)
     min_val = - bound
     max_val = bound - 1
-    rounded = torch.floor(input / delta + 0.5)
+    rounded = torch.floor(torch.tensor(input / delta + 0.5,dtype=torch.float32))
 
     clipped_value = torch.clamp(rounded, min_val, max_val) * delta
     return clipped_value
