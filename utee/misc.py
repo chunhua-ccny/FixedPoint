@@ -154,6 +154,7 @@ def eval_model(model, ds, n_sample=None, ngpu=1, is_imagenet=False):
     import torch
     from torch import nn
     from torch.autograd import Variable
+    print('misc begin')
 
     class ModelWrapper(nn.Module):
         def __init__(self, model):
@@ -169,12 +170,16 @@ def eval_model(model, ds, n_sample=None, ngpu=1, is_imagenet=False):
             input.data[:, 2, :, :].sub_(self.mean[2]).div_(self.std[2])
             return self.model(input)
 
+    print('misc,aaa,model,ddddddddddddd')
     correct1, correct5 = 0, 0
     n_passed = 0
     if is_imagenet:
         model = ModelWrapper(model)
+    print('misc,ddd,model=')
     model = model.eval()
+    print('misc,eee,model=')
     model = torch.nn.DataParallel(model, device_ids=range(ngpu)).cuda()
+    print('misc,fff,model=')
 
     n_sample = len(ds) if n_sample is None else n_sample
     for idx, (data, target) in enumerate(tqdm.tqdm(ds, total=n_sample)):

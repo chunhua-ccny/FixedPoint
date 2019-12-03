@@ -54,6 +54,7 @@ def cifar10(n_channel, pretrained=None):
         state_dict = m.state_dict() if isinstance(m, nn.Module) else m
         assert isinstance(state_dict, (dict, OrderedDict)), type(state_dict)
         model.load_state_dict(state_dict)
+    print('ddd, cifar10 model generation succeed')
     return model
 
 def cifar100(n_channel, pretrained=None):

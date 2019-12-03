@@ -59,7 +59,7 @@ if args.param_bits < 32:
                 bits = args.bn_bits
         else:
             bits = args.param_bits
-
+        #print('hereeeeeeeeeeeeee')
         if args.quant_method == 'linear':
             sf = bits - 1. - quant.compute_integral_part(v, overflow_rate=args.overflow_rate)
             v_quant  = quant.linear_quantize(v, sf, bits=bits)
@@ -70,15 +70,16 @@ if args.param_bits < 32:
         else:
             v_quant = quant.tanh_quantize(v, bits=bits)
         state_dict_quant[k] = v_quant
-        print(k, bits)
+        #print('dch,k,bits=',k, bits)
     model_raw.load_state_dict(state_dict_quant)
-
+print('hereeeeeeeeeeeeeeee,dch')
 # quantize forward activation
 if args.fwd_bits < 32:
     model_raw = quant.duplicate_model_with_quant(model_raw, bits=args.fwd_bits, overflow_rate=args.overflow_rate,
                                                  counter=args.n_sample, type=args.quant_method)
-    print(model_raw)
+    print('ddd=',model_raw)
     val_ds_tmp = ds_fetcher(10, data_root=args.data_root, train=False, input_size=args.input_size)
+    print('model_raw,val_ds_tmp=',model_raw,val_ds_tmp)
     misc.eval_model(model_raw, val_ds_tmp, ngpu=1, n_sample=args.n_sample, is_imagenet=is_imagenet)
 
 # eval model
